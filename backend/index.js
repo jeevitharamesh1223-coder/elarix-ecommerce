@@ -112,7 +112,7 @@ sequelize
     } catch (seedErr) {
       console.warn('[ELARIX Init Warning]', seedErr.message);
     }
-    app.listen(PORT, () => console.log(`ELARIX Server running on port ${PORT}`));
+    app.listen(PORT, '0.0.0.0', () => console.log(`ELARIX Server running on port ${PORT} (host: 0.0.0.0)`));
   })
   .catch((err) => {
     console.error('Database connection failed', err);

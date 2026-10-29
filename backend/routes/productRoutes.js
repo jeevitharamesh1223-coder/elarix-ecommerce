@@ -8,14 +8,15 @@ const { Op } = require('sequelize');
 router.get('/', async (req, res) => {
   try {
     const where = {};
+    const matchOp = Product.sequelize.getDialect() === 'postgres' ? Op.iLike : Op.like;
     if (req.query.category && req.query.category.trim().toLowerCase() !== 'all') {
       where.category = {
-        [Op.like]: req.query.category.trim(),
+        [matchOp]: req.query.category.trim(),
       };
     }
     if (req.query.keyword && req.query.keyword.trim()) {
       where.name = {
-        [Op.like]: `%${req.query.keyword.trim()}%`,
+        [matchOp]: `%${req.query.keyword.trim()}%`,
       };
     }
     const products = await Product.findAll({
