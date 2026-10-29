@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdfbf7" />
+      <stop offset="100%" stop-color="#f5ede0" />
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e0b88f" />
+      <stop offset="100%" stop-color="#c6915b" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#bg)" />
+  <rect x="12" y="12" width="376" height="376" rx="16" fill="none" stroke="#e8ded1" stroke-width="1.5" stroke-dasharray="6 6" />
+
+  <!-- Elegant Cosmetic Icon (Dropper Bottle / Compact Silhouette) -->
+  <g transform="translate(150, 110)" stroke="url(#gold)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Dropper Cap -->
+    <path d="M40 0 L60 0 C64 0 66 4 66 8 L66 18 C66 22 64 24 60 24 L40 24 C36 24 34 22 34 18 L34 8 C34 4 36 0 40 0 Z" fill="#faedcd" />
+    <path d="M50 0 L50 -12 C50 -16 46 -18 44 -18" />
+    <!-- Bottle Neck -->
+    <rect x="42" y="24" width="16" height="12" fill="#faf4eb" />
+    <!-- Bottle Shoulder & Body -->
+    <path d="M30 46 C30 36 40 36 42 36 L58 36 C60 36 70 36 70 46 L76 110 C76 118 70 124 62 124 L38 124 C30 124 24 118 24 110 Z" fill="#faf6f0" />
+    <!-- Label -->
+    <rect x="34" y="60" width="32" height="42" rx="4" fill="#faedcd" stroke="none" />
+    <line x1="40" y1="72" x2="60" y2="72" stroke="#d4a373" stroke-width="2" />
+    <line x1="44" y1="80" x2="56" y2="80" stroke="#d4a373" stroke-width="1.5" />
+    <!-- Sparkles -->
+    <path d="M92 20 Q92 32 104 32 Q92 32 92 44 Q92 32 80 32 Q92 32 92 20 Z" fill="url(#gold)" stroke="none" />
+    <path d="M12 70 Q12 78 20 78 Q12 78 12 86 Q12 78 4 78 Q12 78 12 70 Z" fill="url(#gold)" stroke="none" transform="scale(0.7) translate(5, 40)" />
+  </g>
+
+  <!-- Brand & Text -->
+  <text x="200" y="280" font-family="'Playfair Display', Georgia, serif" font-size="22" font-weight="700" letter-spacing="4" fill="#8c6239" text-anchor="middle">
+    ELARIX
+  </text>
+  <text x="200" y="306" font-family="'Lato', sans-serif" font-size="12" font-weight="400" letter-spacing="2" fill="#a89a8c" text-anchor="middle">
+    BEAUTY &amp; SKINCARE
+  </text>
+  <text x="200" y="336" font-family="'Lato', sans-serif" font-size="11" font-weight="300" fill="#b8a896" text-anchor="middle">
+    Product Image Coming Soon
+  </text>
+</svg>
