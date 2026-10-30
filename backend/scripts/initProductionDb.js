@@ -6,8 +6,9 @@
 const sequelize = require('../config/database');
 const Product = require('../models/Product');
 const User = require('../models/User');
+const { newProducts } = require('./updateCatalog');
 
-const officialProducts = [
+const baseOfficialProducts = [
   // Makeup - Lip Products
   {
     name: 'ELARIX Velvet Matte Lipstick - Ruby Red',
@@ -15,7 +16,7 @@ const officialProducts = [
     description: 'A smooth, velvet matte finish that lasts all day.',
     category: 'Makeup',
     type: 'Lipsticks',
-    price: 99,
+    price: 249,
     countInStock: 50,
     rating: 4.5,
     numReviews: 120,
@@ -29,7 +30,7 @@ const officialProducts = [
     description: 'Perfect everyday nude shade with a matte finish.',
     category: 'Makeup',
     type: 'Lipsticks',
-    price: 99,
+    price: 229,
     countInStock: 50,
     rating: 4.6,
     numReviews: 95,
@@ -53,7 +54,7 @@ const officialProducts = [
   },
   {
     name: 'ELARIX Tinted Lip Balm - Berry',
-    image: 'https://images.unsplash.com/photo-1585232004423-244e0e6904e3?auto=format&fit=crop&q=80&w=400',
+    image: 'https://images.unsplash.com/photo-1752327091756-b24f2764b653?auto=format&fit=crop&q=80&w=400',
     description: 'A deeply hydrating lip balm with a hint of berry tint.',
     category: 'Skincare',
     type: 'Lip Care',
@@ -69,7 +70,7 @@ const officialProducts = [
   // Makeup - Face Products
   {
     name: 'ELARIX Radiant Foundation - Ivory',
-    image: 'https://images.unsplash.com/photo-1631214500115-598fc2cb8d2d?auto=format&fit=crop&q=80&w=400',
+    image: 'https://images.unsplash.com/photo-1607602132700-068258431c6c?auto=format&fit=crop&q=80&w=400',
     description: 'Flawless coverage with a radiant, natural glow for fair skin.',
     category: 'Makeup',
     type: 'Foundation',
@@ -111,11 +112,11 @@ const officialProducts = [
   },
   {
     name: 'ELARIX Glow Highlighter',
-    image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=400',
+    image: 'https://images.unsplash.com/photo-1503236823255-94609f598e71?auto=format&fit=crop&q=80&w=400',
     description: 'Luminous powder for that perfect sun-kissed glow.',
     category: 'Makeup',
     type: 'Highlighter',
-    price: 99,
+    price: 349,
     countInStock: 35,
     rating: 4.8,
     numReviews: 110,
@@ -125,11 +126,11 @@ const officialProducts = [
   },
   {
     name: 'ELARIX Flawless Concealer',
-    image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&q=80&w=400',
+    image: 'https://images.unsplash.com/photo-1598452963314-b09f397a5c48?auto=format&fit=crop&q=80&w=400',
     description: 'Full-coverage liquid concealer that hides dark circles.',
     category: 'Makeup',
     type: 'Concealer',
-    price: 79,
+    price: 299,
     countInStock: 55,
     rating: 4.5,
     numReviews: 140,
@@ -141,11 +142,11 @@ const officialProducts = [
   // Makeup - Eye Products
   {
     name: 'ELARIX Volume Mascara',
-    image: 'https://images.unsplash.com/photo-1631214524020-7e18db9a8f92?auto=format&fit=crop&q=80&w=400',
+    image: 'https://images.unsplash.com/photo-1631214540553-ff044a3ff1d4?auto=format&fit=crop&q=80&w=400',
     description: 'Intense black mascara for bold, voluminous lashes.',
     category: 'Makeup',
     type: 'Mascara',
-    price: 89,
+    price: 299,
     countInStock: 60,
     rating: 4.7,
     numReviews: 230,
@@ -155,7 +156,7 @@ const officialProducts = [
   },
   {
     name: 'ELARIX Precision Eyeliner',
-    image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=400',
+    image: 'https://images.unsplash.com/photo-1631214524020-7e18db9a8f92?auto=format&fit=crop&q=80&w=400',
     description: 'Jet black liquid eyeliner with a precise felt tip.',
     category: 'Makeup',
     type: 'Eyeliner',
@@ -173,7 +174,7 @@ const officialProducts = [
     description: '9 highly pigmented everyday neutral shades.',
     category: 'Makeup',
     type: 'Eyeshadow',
-    price: 199,
+    price: 499,
     countInStock: 30,
     rating: 4.9,
     numReviews: 310,
@@ -190,7 +191,7 @@ const officialProducts = [
     category: 'Skincare',
     type: 'Face Wash',
     skinType: 'All',
-    price: 89,
+    price: 279,
     countInStock: 50,
     rating: 4.7,
     numReviews: 150,
@@ -200,12 +201,12 @@ const officialProducts = [
   },
   {
     name: 'ELARIX Glow Toner',
-    image: 'https://images.unsplash.com/photo-1629198688000-71f23e745b6e?auto=format&fit=crop&q=80&w=400',
+    image: 'https://images.unsplash.com/photo-1627384113743-6bd5a479fffd?auto=format&fit=crop&q=80&w=400',
     description: 'Exfoliating toner that leaves skin bright and clear.',
     category: 'Skincare',
     type: 'Toner',
     skinType: 'Oily/Combination',
-    price: 99,
+    price: 249,
     countInStock: 40,
     rating: 4.4,
     numReviews: 80,
@@ -232,7 +233,7 @@ const officialProducts = [
   // Skincare - Serums & Moisturizers
   {
     name: 'ELARIX Hydrating Serum',
-    image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=400',
+    image: 'https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&q=80&w=400',
     description: 'Intense hydration for a plump, youthful look.',
     category: 'Skincare',
     type: 'Serum',
@@ -262,7 +263,7 @@ const officialProducts = [
   },
   {
     name: 'ELARIX Daily Moisturizer',
-    image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&q=80&w=400',
+    image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=400',
     description: 'Lightweight, everyday moisture for all skin types.',
     category: 'Skincare',
     type: 'Moisturizer',
@@ -277,7 +278,7 @@ const officialProducts = [
   },
   {
     name: 'ELARIX Night Cream',
-    image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=400',
+    image: 'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&q=80&w=400',
     description: 'Rich, repairing cream for overnight rejuvenation.',
     category: 'Skincare',
     type: 'Moisturizer',
@@ -324,7 +325,7 @@ const officialProducts = [
   },
   {
     name: 'ELARIX Clay Detox Mask',
-    image: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&q=80&w=400',
+    image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=400',
     description: 'Purifying mask that draws out impurities.',
     category: 'Skincare',
     type: 'Face Mask',
@@ -341,7 +342,7 @@ const officialProducts = [
   // Eye Care
   {
     name: 'ELARIX Depuffing Eye Cream',
-    image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=400',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/f/fc/Under_eye_cream.jpg',
     description: 'Reduces puffiness and dark circles instantly.',
     category: 'Skincare',
     type: 'Eye Care',
@@ -354,6 +355,25 @@ const officialProducts = [
     benefits: 'Awakens tired eyes',
     howToUse: 'Gently dab under eyes morning and night.',
   },
+  {
+    name: 'ELARIX Rose Glow Setting Spray',
+    image: 'https://images.unsplash.com/photo-1583209814683-c023dd293cc6?auto=format&fit=crop&q=80&w=400',
+    description: 'Refreshing facial mist that sets makeup and delivers all-day luminous hydration.',
+    category: 'Makeup',
+    type: 'Setting Spray',
+    price: 199,
+    countInStock: 50,
+    rating: 4.7,
+    numReviews: 110,
+    ingredients: 'Rosewater, Niacinamide, Hyaluronic Acid',
+    benefits: 'Hydrating, Long-wearing',
+    howToUse: 'Mist evenly over face after makeup application.',
+  },
+];
+
+const officialProducts = [
+  ...baseOfficialProducts,
+  ...newProducts,
 ];
 
 async function autoSeedIfEmpty() {
@@ -361,7 +381,7 @@ async function autoSeedIfEmpty() {
 
   const count = await Product.count();
   if (count === 0) {
-    console.log('[ELARIX Init] Empty database detected. Seeding official 24-product catalog...');
+    console.log(`[ELARIX Init] Empty database detected. Seeding official ${officialProducts.length}-product catalog...`);
     await Product.bulkCreate(officialProducts);
     console.log(`[ELARIX Init] Successfully seeded ${officialProducts.length} official products.`);
 

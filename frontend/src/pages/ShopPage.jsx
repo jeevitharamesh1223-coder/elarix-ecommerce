@@ -79,7 +79,15 @@ const ShopPage = () => {
     }
 
     // Price range filter
-    if (priceFilter === 'under-100') {
+    if (priceFilter === 'under-200') {
+      filtered = filtered.filter(p => Number(p.price) <= 200);
+    } else if (priceFilter === '200-400') {
+      filtered = filtered.filter(p => Number(p.price) > 200 && Number(p.price) <= 400);
+    } else if (priceFilter === '400-600') {
+      filtered = filtered.filter(p => Number(p.price) > 400 && Number(p.price) <= 600);
+    } else if (priceFilter === 'above-600') {
+      filtered = filtered.filter(p => Number(p.price) > 600);
+    } else if (priceFilter === 'under-100') {
       filtered = filtered.filter(p => Number(p.price) <= 100);
     } else if (priceFilter === '100-150') {
       filtered = filtered.filter(p => Number(p.price) > 100 && Number(p.price) <= 150);
@@ -141,13 +149,14 @@ const ShopPage = () => {
             className="form-control" 
             value={priceFilter} 
             onChange={(e) => setPriceFilter(e.target.value)} 
-            style={{ width: '150px', padding: '0.6rem 0.8rem' }}
+            style={{ width: '160px', padding: '0.6rem 0.8rem' }}
             aria-label="Filter by price"
           >
             <option value="">All Prices</option>
-            <option value="under-100">Under ₹100</option>
-            <option value="100-150">₹100 to ₹150</option>
-            <option value="above-150">Above ₹150</option>
+            <option value="under-200">Under ₹200</option>
+            <option value="200-400">₹200 to ₹400</option>
+            <option value="400-600">₹400 to ₹600</option>
+            <option value="above-600">Above ₹600</option>
           </select>
 
           {/* Sort By Dropdown */}
