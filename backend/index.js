@@ -112,8 +112,30 @@ sequelize
     } catch (seedErr) {
       console.warn('[ELARIX Init Warning]', seedErr.message);
     }
+
+    // Flag-gated one-time production catalog migration
+    // Enabled ONLY when RUN_CATALOG_MIGRATION=true is set in the environment
+    if (process.env.RUN_CATALOG_MIGRATION === 'true') {
+      console.log('====================================================');
+      console.log('[ELARIX Migration] RUN_CATALOG_MIGRATION=true detected.');
+      console.log('[ELARIX Migration] Executing catalog migration before opening server listener...');
+      console.log('====================================================');
+      try {
+        const { updateCatalog } = require('./scripts/updateCatalog');
+        await updateCatalog();
+        console.log('[ELARIX Migration] Catalog migration completed successfully.');
+      } catch (migrationErr) {
+        const rawMsg = migrationErr?.message || String(migrationErr);
+        const safeMsg = rawMsg.replace(/:\/\/[^@]*@/, '://***:***@');
+        console.error('[ELARIX Migration Fatal Error] Startup aborted. Catalog migration failed:', safeMsg);
+        process.exit(1);
+      }
+    }
+
     app.listen(PORT, '0.0.0.0', () => console.log(`ELARIX Server running on port ${PORT} (host: 0.0.0.0)`));
   })
   .catch((err) => {
-    console.error('Database connection failed', err);
+    const rawMsg = err?.message || String(err);
+    const safeMsg = rawMsg.replace(/:\/\/[^@]*@/, '://***:***@');
+    console.error('Database connection failed:', safeMsg);
   });

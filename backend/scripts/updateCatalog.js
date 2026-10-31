@@ -369,11 +369,27 @@ async function updateCatalog() {
   }
   console.log(`Images updated: ${imagesUpdated} products corrected.`);
 
-  // Step 3: Insert the 16 new products idempotently
-  console.log('\n[4/4] Inserting 16 new products (idempotent check)...');
+  // Step 3: Insert missing catalog items idempotently (Setting Spray + 16 new products)
+  console.log('\n[4/4] Inserting new products and ensuring complete catalog (idempotent check)...');
+  const settingSprayItem = {
+    name: 'ELARIX Rose Glow Setting Spray',
+    image: 'https://images.unsplash.com/photo-1583209814683-c023dd293cc6?auto=format&fit=crop&q=80&w=400',
+    description: 'Refreshing facial mist that sets makeup and delivers all-day luminous hydration.',
+    category: 'Makeup',
+    type: 'Setting Spray',
+    price: 199,
+    countInStock: 50,
+    rating: 4.7,
+    numReviews: 110,
+    ingredients: 'Rosewater, Niacinamide, Hyaluronic Acid',
+    benefits: 'Hydrating, Long-wearing',
+    howToUse: 'Mist evenly over face after makeup application.',
+  };
+
+  const productsToEnsure = [settingSprayItem, ...newProducts];
   let newAdded = 0;
   let alreadyExist = 0;
-  for (const item of newProducts) {
+  for (const item of productsToEnsure) {
     const existing = await Product.findOne({ where: { name: item.name } });
     if (!existing) {
       await Product.create(item);
@@ -416,13 +432,25 @@ async function updateCatalog() {
   console.log(`  - Makeup Products     : ${totalMakeup}`);
   console.log(`  - Skincare Products   : ${totalSkincare}`);
   console.log('====================================================\n');
+
+  return {
+    pricesUpdated,
+    imagesUpdated,
+    newAdded,
+    alreadyExist,
+    totalCatalogCount,
+    totalMakeup,
+    totalSkincare,
+  };
 }
 
 if (require.main === module) {
   updateCatalog()
     .then(() => process.exit(0))
     .catch((err) => {
-      console.error('[Update Catalog Error]', err);
+      const rawMsg = err?.message || String(err);
+      const safeMsg = rawMsg.replace(/:\/\/[^@]*@/, '://***:***@');
+      console.error('[Update Catalog Fatal Error]', safeMsg);
       process.exit(1);
     });
 }
